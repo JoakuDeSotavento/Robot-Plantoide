@@ -32,6 +32,8 @@ int zero_speed = 135;
 int speed_step = 1; // how much the speed in/decrease per each button press
 int current_speed = zero_speed;
 
+byte estado = 0;
+
 void setup()
 {
   pinMode(BUMPER_R, INPUT);
@@ -83,15 +85,48 @@ void setup()
    speed: 0 ... 127 ... 255 = full speed backward ... stop ... full speed forward
 */
 
-int checkIR(){
-  
+
+
+void upadate() {
+  for (int i = 0; i < numSensor; i++) {
+    cmArray[i] = getDistance(i);
+    Serial.print("Sensor:");
+    Serial.print(cmArray[i]);
+    Serial.print("\t");
   }
+  Serial.print("Velocity:");
+  Serial.print(current_speed);
+  Serial.print("\t");
+  Serial.print("Estado:");
+  Serial.print(estado);
+  Serial.println();
+}
+
+int checkIR() {
+
+  if (cmArray[1] <= 70){ 
+    estado = 1;
+  }else {
+    estado = 0;
+    }
+
+}
 
 void change_speed()
 {
-  if (current_speed <= (max_speed - speed_step))
-  {
+  /*
+    if (current_speed <= (max_speed - speed_step))
+    {
     current_speed = current_speed + speed_step;
+    }
+    else
+    {
+    current_speed = zero_speed;
+    }*/
+
+  if (current_speed >= (0 + speed_step))
+  {
+    current_speed = current_speed - speed_step;
   }
   else
   {
@@ -101,18 +136,22 @@ void change_speed()
 
 void loop()
 {
-  for (int i = 0; i < numSensor; i++) {
-    cmArray[i] = getDistance(i);
-    Serial.print("Sensor:");
-    Serial.print(cmArray[i]);
-    Serial.print("\t");
-  }
-  Serial.print("Velocity:");
-  Serial.print(current_speed);
-  Serial.println();
+  upadate();
+  checkIR();
 
-  analogWrite(MOTOR_L, current_speed);
-  analogWrite(MOTOR_R, current_speed);
+  //analogWrite(MOTOR_L, zero_speed);
+  //analogWrite(MOTOR_R, zero_speed);
+
+  switch (estado) {
+    case 0:
+      analogWrite(MOTOR_L, zero_speed);
+      analogWrite(MOTOR_R, zero_speed);
+      break;
+    case 1:
+      analogWrite(MOTOR_L, 170);
+      analogWrite(MOTOR_R, 170);
+      break;
+  }
 
   /*
     Serial.println("------");

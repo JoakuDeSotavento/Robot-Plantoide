@@ -28,7 +28,6 @@ void loop()
 }
 
 
-
 // the following is used to interpolate the distance from a table
 // table entries are distances in steps of 250 millivolts
 const int TABLE_ENTRIES = 12;
