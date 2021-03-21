@@ -1,8 +1,15 @@
+#include <SPI.h>
+#include <SD.h>
+
+
 // sensores
 const byte sensorPin1 = 0;
 const byte sensorPin2 = 1;
 const byte sensorPin3 = 2;
 const byte sensorPin4 = 3;
+
+const int umbral = 100;
+const int umbral2 = 120;
 
 const byte numSensor = 4;
 int cmArray[4] = {0, 0, 0, 0};
@@ -17,18 +24,15 @@ static int distance[TABLE_ENTRIES] = {150, 140, 130, 120, 110, 100, 90, 80, 70, 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const byte BUMPER_R = 7;
-const byte BUMPER_C = 6;
-const byte BUMPER_L = 5;
-const byte WELL_DROP = 4;
-
-const byte MOTOR_L = 10; // the pin for the left motor power
-const byte MOTOR_R = 11; // the pin for the right motor power
+const byte MOTOR_L = 9; // the pin for the left motor power
+const byte MOTOR_R = 10; // the pin for the right motor power
 
 int speed_change_dir = 0;
 int max_speed = 255;
 int min_speed = 0;
 int zero_speed = 135;
+int fSpeed = 170;
+int bSpeed = 100;
 int speed_step = 1; // how much the speed in/decrease per each button press
 int current_speed = zero_speed;
 
@@ -36,16 +40,15 @@ byte estado = 0;
 
 void setup()
 {
-  pinMode(BUMPER_R, INPUT);
-  pinMode(BUMPER_C, INPUT);
-  pinMode(BUMPER_L, INPUT);
-  pinMode(WELL_DROP, INPUT);
+ 
   pinMode(MOTOR_L, OUTPUT); // tell Arduino LED is an output
   pinMode(MOTOR_R, OUTPUT); // tell Arduino LED is an output
   attachInterrupt(0, change_speed, FALLING);
   Serial.begin(9600);
   speed_change_dir = 1;
   randomSeed(analogRead(5));
+  analogWrite(MOTOR_L, zero_speed);
+  analogWrite(MOTOR_R, zero_speed);
 }
 /*
   int check_bumpers()
@@ -85,12 +88,12 @@ void setup()
    speed: 0 ... 127 ... 255 = full speed backward ... stop ... full speed forward
 */
 
-
-
 void upadate() {
   for (int i = 0; i < numSensor; i++) {
     cmArray[i] = getDistance(i);
-    Serial.print("Sensor:");
+    Serial.print("Sensor");
+    Serial.print(i);
+    Serial.print(":");
     Serial.print(cmArray[i]);
     Serial.print("\t");
   }
@@ -100,16 +103,6 @@ void upadate() {
   Serial.print("Estado:");
   Serial.print(estado);
   Serial.println();
-}
-
-int checkIR() {
-
-  if (cmArray[1] <= 70){ 
-    estado = 1;
-  }else {
-    estado = 0;
-    }
-
 }
 
 void change_speed()
@@ -139,17 +132,79 @@ void loop()
   upadate();
   checkIR();
 
-  //analogWrite(MOTOR_L, zero_speed);
-  //analogWrite(MOTOR_R, zero_speed);
-
   switch (estado) {
+    //movimientos(); 0 stop, 1 ->, 2 <-, 3 giro derecha, 4 giro izquierda
+    // movimientos si un solo sensor percibe algo
     case 0:
-      analogWrite(MOTOR_L, zero_speed);
-      analogWrite(MOTOR_R, zero_speed);
+      // no se mueve
+      movimientos(0);
+      delay(100);
       break;
     case 1:
-      analogWrite(MOTOR_L, 170);
-      analogWrite(MOTOR_R, 170);
+      // si el sensor forntal detecta, da marcha a trás
+      movimientos(2);
+      delay(300);
+      break;
+    case 2:
+      // si el sensor izquierdo detecta, gira a la derecha y avanza
+      movimientos(3);
+      delay(300);
+      break;
+    case 3:
+      // si el sensor trasero detecta, da marcha hacia delante
+      movimientos(1);
+      delay(300);
+      break;
+    case 4:
+      // si el sensor derecho detecta, gira a la izquierda y avanza
+      movimientos(4);
+      delay(100);
+      break;
+    // movimientos si dos sensores perciben cosas
+    case 5:
+      // si los sensores frontales y el izquierdo, gira 45 grados a la izquierda y da marcha atrás
+      movimientos(0);
+      delay(100);
+      break;
+    case 6:
+      // si los sensores frontales y trasero, gira 180 a derecha o izquierda y da marcha delante o atrás
+      movimientos(0);
+      delay(100);
+      break;
+    case 7:
+
+      break;
+
+    case 8:
+
+      break;
+
+    case 9:
+
+      break;
+
+    case 10:
+
+      break;
+
+    case 11:
+
+      break;
+
+    case 12:
+
+      break;
+
+    case 13:
+
+      break;
+
+    case 14:
+
+      break;
+
+    case 15:
+
       break;
   }
 
@@ -238,18 +293,4 @@ void loop()
     Serial.println(current_speed);
     delay(10);
   */
-}
-
-int getDistance(int _pin)
-{
-  int val = analogRead(_pin);
-  int mV = (val * referenceMv) / 1023;
-  if ( mV > INTERVAL * TABLE_ENTRIES - 1 )
-    return distance[TABLE_ENTRIES - 1];
-  else
-  {
-    int index = mV / INTERVAL;
-    float frac = (mV % 250) / (float)INTERVAL;
-    return distance[index] - ((distance[index] - distance[index + 1]) * frac);
-  }
 }
