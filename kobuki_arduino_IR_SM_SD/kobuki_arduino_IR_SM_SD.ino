@@ -16,7 +16,7 @@ const byte sensorPin3 = 2;
 const byte sensorPin4 = 3;
 
 const int umbral = 120;
-const int umbral2 = 100;
+const int umbral2 = 105;
 
 //const int umbral = 120;
 //const int umbral2 = 100;
@@ -155,7 +155,7 @@ void loop()
       movY = movY;
       incazzato++;
       movimientos(3);
-      delay(300);
+      delay(400);
       sdWrite(movX, movY, incazzato);
       delay(30);
       break;
@@ -165,7 +165,7 @@ void loop()
       movY += 1;
       incazzato++;
       movimientos(1);
-      delay(300);
+      delay(700);
       sdWrite(movX, movY, incazzato);
       delay(30);
       break;
