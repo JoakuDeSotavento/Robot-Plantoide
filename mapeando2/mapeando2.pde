@@ -4,7 +4,7 @@ String[] lines;
 float modW = 0.08;
 float modCoord = 7;
 
-float eDiam = 100;
+float eDiam = 200;
 
 background(255);
 size(1920, 1080);
@@ -40,7 +40,7 @@ popStyle();
 
 
 for (int i = 0; i < robot.length-1; i++) {
-  stroke(0, 80);
+  stroke(0, 50);
   strokeWeight(robot[i].z*modW);
   line(robot[i].x*modCoord, robot[i].y*modCoord, robot[i+1].x*modCoord, robot[i+1].y*modCoord);
 }
