@@ -1,3 +1,7 @@
+// una linea debajo y una por arriba
+// que no supere un grosor
+// proporsionar
+
 PVector[] robot;
 String[] lines;
 
@@ -40,6 +44,10 @@ popStyle();
 
 
 for (int i = 0; i < robot.length-1; i++) {
+  ////////////////////// aqui
+  stroke(0);
+  strokeWeight(10);
+  line(robot[i].x*modCoord, robot[i].y*modCoord, robot[i+1].x*modCoord, robot[i+1].y*modCoord);
   stroke(0, 50);
   strokeWeight(robot[i].z*modW);
   line(robot[i].x*modCoord, robot[i].y*modCoord, robot[i+1].x*modCoord, robot[i+1].y*modCoord);
