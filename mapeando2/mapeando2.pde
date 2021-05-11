@@ -5,15 +5,15 @@
 PVector[] robot;
 String[] lines;
 
-float modW = 0.08;
-float modCoord = 7;
+float modW = 0.07;
+float modCoord = 6;
 
 float eDiam = 200;
 
 background(255);
 size(1920, 1080);
 smooth();
-lines = loadStrings("DATALOG.TXT");
+lines = loadStrings("DATALOG4.TXT");
 
 translate(width/2, height/2);
 
@@ -45,11 +45,14 @@ popStyle();
 
 for (int i = 0; i < robot.length-1; i++) {
   ////////////////////// aqui
+  //robot[i].x = constrain(robot[i].x, 0, width);
+ // robot[i].y = constrain(robot[i].y, 0, height);
   stroke(0);
-  strokeWeight(10);
+  strokeWeight(1);
   line(robot[i].x*modCoord, robot[i].y*modCoord, robot[i+1].x*modCoord, robot[i+1].y*modCoord);
-  stroke(0, 50);
+  stroke(70, 10);
   strokeWeight(robot[i].z*modW);
+  //strokeWeight(10);
   line(robot[i].x*modCoord, robot[i].y*modCoord, robot[i+1].x*modCoord, robot[i+1].y*modCoord);
 }
 

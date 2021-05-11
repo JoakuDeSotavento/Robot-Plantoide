@@ -14,15 +14,18 @@ const byte sensorPin1 = 0;
 const byte sensorPin2 = 1;
 const byte sensorPin3 = 2;
 const byte sensorPin4 = 3;
+const byte sensorPin5 = 4;
+const byte sensorPin6 = 5;
 
-const int umbral = 120;
+const int umbral = 100;
 const int umbral2 = 100;
 
 //const int umbral = 120;
 //const int umbral2 = 100;
 
-const byte numSensor = 4;
-int cmArray[4] = {0, 0, 0, 0};
+const byte numSensor = 6;
+// en sentido inverso a las manecillas del relog: frontal, izquierdo, izquierdo2, trasero, derecho2 y derecho.
+int cmArray[numSensor] = {0, 0, 0, 0, 0, 0};
 
 // the following is used to interpolate the distance from a table
 // table entries are distances in steps of 250 millivolts
@@ -34,8 +37,8 @@ static int distance[TABLE_ENTRIES] = {150, 140, 130, 120, 110, 100, 90, 80, 70, 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const byte MOTOR_L = 9; // the pin for the left motor power
-const byte MOTOR_R = 10; // the pin for the right motor power
+const byte MOTOR_L = 10; // the pin for the left motor power
+const byte MOTOR_R = 9; // the pin for the right motor power
 
 int speed_change_dir = 0;
 int max_speed = 255;

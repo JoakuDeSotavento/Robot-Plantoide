@@ -3,6 +3,8 @@ const byte sensorPin1 = 0;
 const byte sensorPin2 = 1;
 const byte sensorPin3 = 2;
 const byte sensorPin4 = 3;
+const byte sensorPin5 = 4;
+const byte sensorPin6 = 5;
 
 const byte numSensor = 4;
 int cmArray[4] = {0, 0, 0, 0};
